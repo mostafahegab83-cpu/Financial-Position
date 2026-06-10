@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Records</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <h2>💰 My Finance</h2>
+  <ul>
+    <li><a href="index.html">Financial Position</a></li>
+    <li><a href="expenses.html">Expenses</a></li>
+    <li><a href="records.html" class="active">Records</a></li>
+    <li><a href="summary.html">Summary</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <h1>Records</h1>
+  <p class="subtitle">Edit or delete any saved entry.</p>
+
+  <section class="card">
+    <h2>Income</h2>
+    <table class="table" id="incomeTable">
+      <thead><tr><th>Label</th><th>Amount</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Debts</h2>
+    <table class="table" id="debtTable">
+      <thead><tr><th>Label</th><th>Amount</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Expenses</h2>
+    <table class="table" id="expensesTable">
+      <thead><tr><th>Date</th><th>Name</th><th>Amount</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

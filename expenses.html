@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Expenses</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <h2>💰 My Finance</h2>
+  <ul>
+    <li><a href="index.html">Financial Position</a></li>
+    <li><a href="expenses.html" class="active">Expenses</a></li>
+    <li><a href="records.html">Records</a></li>
+    <li><a href="summary.html">Summary</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <h1>Manage Expenses</h1>
+
+  <section class="card">
+    <h2>Cycle</h2>
+    <div class="row">
+      <label>Start
+        <input type="date" id="cycleStart"/>
+      </label>
+      <label>End
+        <input type="date" id="cycleEnd"/>
+      </label>
+      <button class="btn primary" onclick="saveCycle()">Save Cycle</button>
+    </div>
+    <p id="cycleInfo" class="note"></p>
+  </section>
+
+  <section class="card">
+    <h2>Add Expense</h2>
+    <div class="row">
+      <input type="text" id="expName" placeholder="Expense name"/>
+      <input type="number" id="expAmount" placeholder="Amount"/>
+      <input type="date" id="expDate"/>
+      <button class="btn primary" onclick="addExpense()">Add</button>
+    </div>
+  </section>
+
+  <section class="card result">
+    <h2>Total Paid (current cycle)</h2>
+    <div class="big-number" id="totalExpenses">0.00</div>
+  </section>
+
+  <section class="card">
+    <h2>Expenses</h2>
+    <table class="table" id="expTable">
+      <thead>
+        <tr><th>Date</th><th>Name</th><th>Amount</th><th></th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
