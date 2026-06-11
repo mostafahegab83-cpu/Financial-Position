@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Financial Position</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <h2>💰 My Finance</h2>
+  <ul>
+    <li><a href="index.html" class="active">Financial Position</a></li>
+    <li><a href="expenses.html">Expenses</a></li>
+    <li><a href="records.html">Records</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="summary.html">Summary</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <h1>Financial Position</h1>
+  <p class="subtitle">Financial Position = Total Income − Total Debts</p>
+
+  <div class="grid">
+    <section class="card income">
+      <h2>Total Income</h2>
+      <div class="big-number" id="totalIncome">0.00</div>
+      <div class="row">
+        <input type="number" id="incomeInput" placeholder="Amount" />
+        <input type="text" id="incomeLabel" placeholder="Label (optional)" />
+        <input type="date" id="incomeDate" title="Income date (defaults to today)" />
+      </div>
+      <div class="btn-row">
+        <button class="btn primary" onclick="addIncome()">Add</button>
+        <button class="btn" onclick="undoIncome()">Undo</button>
+        <button class="btn danger" onclick="clearIncome()">Clear</button>
+      </div>
+      <ul id="incomeList" class="list"></ul>
+    </section>
+
+    <section class="card debt">
+      <h2>Total Debts</h2>
+      <div class="big-number" id="totalDebts">0.00</div>
+      <div class="row">
+        <input type="number" id="debtInput" placeholder="Amount" />
+        <input type="text" id="debtLabel" placeholder="Label (optional)" />
+      </div>
+      <div class="btn-row">
+        <button class="btn primary" onclick="addDebt()">Add</button>
+        <button class="btn" onclick="undoDebt()">Undo</button>
+        <button class="btn danger" onclick="clearDebt()">Clear</button>
+      </div>
+      <ul id="debtList" class="list"></ul>
+    </section>
+  </div>
+
+  <section class="card result">
+    <h2>Financial Position</h2>
+    <div class="big-number" id="position">0.00</div>
+    <p id="positionNote" class="note"></p>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
