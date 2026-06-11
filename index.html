@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Financial Position</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <h2>💰 My Finance</h2>
+  <ul>
+    <li><a href="index.html" class="active">Financial Position</a></li>
+    <li><a href="records.html">Records</a></li>
+    <li><a href="reports.html">Reports</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <h1>Financial Position</h1>
+  <p class="subtitle">Financial Position = Latest Month Remaining Cash − Total Debts</p>
+
+  <div class="grid">
+    <section class="card income">
+      <h2>Latest Month Remaining Cash</h2>
+      <div class="big-number" id="latestRemaining">0.00</div>
+      <p class="note" id="latestMonthNote">No records yet.</p>
+    </section>
+
+    <section class="card debt">
+      <h2>Total Debts</h2>
+      <div class="big-number" id="totalDebts">0.00</div>
+      <ul id="debtList" class="list"></ul>
+    </section>
+  </div>
+
+  <section class="card result">
+    <h2>Financial Position</h2>
+    <div class="big-number" id="position">0.00</div>
+    <p id="positionNote" class="note"></p>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

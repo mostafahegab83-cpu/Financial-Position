@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Records</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+  .month-table { width:100%; border-collapse:collapse; }
+  .month-table th, .month-table td { border:1px solid #ddd; padding:8px; vertical-align:top; }
+  .month-table th { background:#f5f5f5; }
+  .detail-row { background:#fafafa; }
+  .detail-row td { padding:10px 14px; }
+  .mini-form { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+  .mini-form input { padding:4px 6px; font-size:13px; }
+  .mini-list { margin:6px 0 10px; padding-left:18px; font-size:13px; }
+  .pos { color:#1a7f37; } .neg { color:#b42318; }
+  .toggle-btn { cursor:pointer; background:none; border:none; color:#0a66c2; }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <h2>💰 My Finance</h2>
+  <ul>
+    <li><a href="index.html">Financial Position</a></li>
+    <li><a href="records.html" class="active">Records</a></li>
+    <li><a href="reports.html">Reports</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <h1>Records</h1>
+  <p class="subtitle">Monthly Cash In and Expenses. Remaining Cash = (previous month remaining + cash in) − expenses.</p>
+
+  <section class="card">
+    <div class="row">
+      <label>Year
+        <select id="yearSelect" onchange="onChangeYear()"></select>
+      </label>
+    </div>
+
+    <table class="month-table" id="recordsTable">
+      <thead>
+        <tr>
+          <th rowspan="2">Month</th>
+          <th colspan="2">Cash In</th>
+          <th colspan="2">Expenses</th>
+          <th rowspan="2">Month Remaining Cash</th>
+          <th rowspan="2">Actions</th>
+        </tr>
+        <tr>
+          <th>Amount</th><th>Description</th>
+          <th>Amount</th><th>Description</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reports — Debts</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <h2>💰 My Finance</h2>
+  <ul>
+    <li><a href="index.html">Financial Position</a></li>
+    <li><a href="records.html">Records</a></li>
+    <li><a href="reports.html" class="active">Reports</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <h1>Debts</h1>
+  <p class="subtitle">All outstanding debts.</p>
+
+  <section class="card">
+    <div class="row">
+      <input type="number" id="debtInput" placeholder="Amount" />
+      <input type="text" id="debtLabel" placeholder="Description" />
+      <button class="btn primary" onclick="addDebt()">Add Debt</button>
+    </div>
+
+    <table class="table" id="debtsReportTable">
+      <thead><tr><th>Amount</th><th>Description</th><th></th></tr></thead>
+      <tbody></tbody>
+      <tfoot><tr><th id="debtsTotal">0.00</th><th>Total</th><th></th></tr></tfoot>
+    </table>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
