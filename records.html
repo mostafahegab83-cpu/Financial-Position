@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Records — Financial Monthly Tracker</title>
+<link rel="icon" href="logo.png"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+  .month-table { width:100%; border-collapse:collapse; background:#fff; }
+  .month-table th, .month-table td { border-bottom:1px solid #eee; padding:14px 12px; vertical-align:top; }
+  .month-table th { background:#fff; text-align:left; font-weight:600; color:#333; }
+  .month-cell { background:#fafafa; border-right:1px solid #eee; min-width:110px; }
+  .month-name { font-weight:700; font-size:15px; display:flex; align-items:center; }
+  .toggle-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; margin-right:6px; border:1px solid #2563eb;
+    background:#fff; color:#2563eb; border-radius:4px; font-weight:700; font-size:14px;
+    cursor:pointer; line-height:1; padding:0;
+  }
+  .toggle-btn:hover { background:#2563eb; color:#fff; }
+  .collapsed-row { background:#f0f7ff; }
+  .collapsed-row .month-cell { background:#e6f0ff; }
+  .collapsed-row .display-desc { color:#475569; font-size:12px; margin-top:2px; }
+  .field-label { font-size:13px; color:#333; margin-bottom:4px; }
+  .field-label + .cell-input { margin-bottom:8px; }
+  .cell-input { width:100%; box-sizing:border-box; padding:6px 8px; font-size:13px; border:1px solid #d9d9d9; border-radius:4px; }
+  .add-link { display:inline-block; margin-top:6px; color:#2563eb; font-size:13px; text-decoration:none; cursor:pointer; }
+  .add-link:hover { text-decoration:underline; }
+  .month-table .btn.primary { background:#2563eb; color:#fff; border:none; padding:6px 14px; border-radius:4px; margin-right:4px; cursor:pointer; }
+  .month-table .btn.danger { background:#dc2626; color:#fff; border:none; padding:6px 14px; border-radius:4px; cursor:pointer; }
+  .month-table .btn { padding:6px 14px; border-radius:4px; }
+  .actions { white-space:nowrap; }
+  .actions .btn { margin-right:4px; }
+  .display-amount { font-weight:600; font-size:14px; }
+  .display-desc { font-size:13px; color:#555; }
+  .muted { color:#999; }
+  .pos { color:#1a7f37; } .neg { color:#b42318; }
+  .container h1 { color:#111; }
+  .subtitle { color:#475569; }
+  body { background:#f5f6f8; }
+  .card { box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+
+  /* Modal */
+  .modal-backdrop {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.45);
+    align-items:center; justify-content:center; z-index:1000;
+  }
+  .modal-backdrop.open { display:flex; }
+  .modal-card { background:#fff; border-radius:10px; padding:24px; width:90%; max-width:420px; }
+  .modal-card h3 { margin-bottom:12px; color:#111; }
+  .modal-card .view-block { margin-bottom:10px; }
+  .modal-card .view-block h4 { color:#475569; font-size:13px; text-transform:uppercase; letter-spacing:.5px; margin-bottom:2px; }
+  .modal-close { margin-top:10px; }
+
+  @media (max-width: 720px) {
+    .month-table thead { display:none; }
+    .month-table tr { display:block; margin-bottom:14px; border:1px solid #ddd; background:#fff; }
+    .month-table td { display:block; border:none; border-bottom:1px solid #eee; }
+    .month-cell { border-right:none; }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <h2><img src="logo.png" alt="logo" style="height:32px;vertical-align:middle;margin-right:8px"/>Finance Tracker</h2>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="records.html" class="active">Records</a></li>
+    <li><a href="reports.html">Debt</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <h1>Financial Monthly Tracker</h1>
+  <p class="subtitle">Track Cash In and Expenses per month. Remaining Cash = Cash In − Expenses.</p>
+
+  <section class="card">
+    <div class="row" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <label>Year
+        <select id="yearSelect" onchange="onChangeYear()"></select>
+      </label>
+      <button type="button" class="btn primary" onclick="exportRecordsToExcel()" style="background:#16a34a;color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">Export to Excel</button>
+      <button type="button" class="btn" onclick="collapseAllMonths()" style="border:1px solid #cbd5e1;background:#fff;color:#334155;padding:8px 16px;border-radius:4px;cursor:pointer;">Collapse all</button>
+      <button type="button" class="btn" onclick="expandAllMonths()" style="border:1px solid #cbd5e1;background:#fff;color:#334155;padding:8px 16px;border-radius:4px;cursor:pointer;">Expand all</button>
+    </div>
+
+    <table class="month-table" id="recordsTable">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Cash In</th>
+          <th>Expenses</th>
+          <th>Month Remaining Cash</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<div class="modal-backdrop" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div id="modalBody"></div>
+    <button class="btn primary modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+
+<script>
+function exportRecordsToExcel(){
+  const year = document.getElementById('yearSelect')?.value || '';
+  const rows = document.querySelectorAll('#recordsTable tbody tr');
+  let html = '<table border="1"><thead><tr>'
+    + '<th>Month</th><th>Cash In Amount</th><th>Cash In Description</th>'
+    + '<th>Expenses Amount</th><th>Expenses Description</th>'
+    + '<th>Month Remaining Cash</th></tr></thead><tbody>';
+  rows.forEach(tr=>{
+    const tds = tr.querySelectorAll('td');
+    if(!tds.length) return;
+    const getText = (el)=> el ? el.innerText.replace(/\s+/g,' ').trim() : '';
+    const month = getText(tds[0]);
+    // Try inputs first; fallback to display text
+    const cashAmt = tds[1]?.querySelector('input[data-field="cashAmount"], .cell-input')?.value
+                 ?? getText(tds[1]?.querySelector('.display-amount')) ?? getText(tds[1]);
+    const cashDesc = tds[1]?.querySelectorAll('input,textarea')[1]?.value
+                  ?? getText(tds[1]?.querySelector('.display-desc')) ?? '';
+    const expAmt = tds[2]?.querySelector('input,textarea')?.value
+                ?? getText(tds[2]?.querySelector('.display-amount')) ?? getText(tds[2]);
+    const expDesc = tds[2]?.querySelectorAll('input,textarea')[1]?.value
+                 ?? getText(tds[2]?.querySelector('.display-desc')) ?? '';
+    const remain = getText(tds[3]);
+    html += `<tr><td>${month}</td><td>${cashAmt||''}</td><td>${cashDesc||''}</td><td>${expAmt||''}</td><td>${expDesc||''}</td><td>${remain}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  const blob = new Blob(['\ufeff<html><head><meta charset="UTF-8"></head><body>'+html+'</body></html>'],
+    {type:'application/vnd.ms-excel'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `records_${year||'all'}.xls`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+</script>
+<script src="app.js"></script>
+</body>
+</html>
